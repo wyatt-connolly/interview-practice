@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops-interview
+  labels:
+    name: devops-interview
+    environment: dev
+    project: devops-interview
