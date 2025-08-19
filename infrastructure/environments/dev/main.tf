@@ -18,13 +18,14 @@ terraform {
   }
 
   # Remote backend configuration for state management
-  backend "s3" {
-    bucket         = "devops-interview-terraform-state"
-    key            = "dev/terraform.tfstate"
-    region         = "us-west-2"
-    encrypt        = true
-    dynamodb_table = "terraform-state-lock"
-  }
+  # Uncomment when S3 bucket is created
+  # backend "s3" {
+  #   bucket         = "devops-interview-terraform-state"
+  #   key            = "dev/terraform.tfstate"
+  #   region         = "us-west-2"
+  #   encrypt        = true
+  #   dynamodb_table = "terraform-state-lock"
+  # }
 }
 
 # AWS Provider configuration
@@ -70,6 +71,7 @@ module "eks" {
   vpc_id          = module.vpc.vpc_id
   private_subnets = module.vpc.private_subnet_ids
   public_subnets  = module.vpc.public_subnet_ids
+  eks_security_group_id = module.vpc.eks_security_group_id
   
   depends_on = [module.vpc]
 }
@@ -84,6 +86,7 @@ module "rds" {
   private_subnets = module.vpc.private_subnet_ids
   db_name        = var.db_name
   db_username    = var.db_username
+  rds_security_group_id = module.vpc.rds_security_group_id
   
   depends_on = [module.vpc]
 }
@@ -96,6 +99,7 @@ module "alb" {
   project_name    = var.project_name
   vpc_id         = module.vpc.vpc_id
   public_subnets = module.vpc.public_subnet_ids
+  alb_security_group_id = module.vpc.alb_security_group_id
   
   depends_on = [module.vpc]
 }
@@ -106,8 +110,8 @@ module "redis" {
   
   environment     = var.environment
   project_name    = var.project_name
-  vpc_id         = module.vpc.vpc_id
   private_subnets = module.vpc.private_subnet_ids
+  redis_security_group_id = module.vpc.redis_security_group_id
   
   depends_on = [module.vpc]
 }

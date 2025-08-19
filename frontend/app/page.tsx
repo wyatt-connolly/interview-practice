@@ -10,6 +10,18 @@ import {
   ClockIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
+  MinusIcon,
+  BoltIcon,
+  CpuChipIcon,
+  CircleStackIcon,
+  AcademicCapIcon,
+  BookOpenIcon,
+  LightBulbIcon,
+  CodeBracketIcon,
+  CommandLineIcon,
+  GlobeAltIcon,
 } from "@heroicons/react/24/outline";
 
 interface SystemStatus {
@@ -17,6 +29,7 @@ interface SystemStatus {
   status: "healthy" | "warning" | "error";
   uptime: string;
   responseTime: number;
+  icon: React.ReactNode;
 }
 
 interface Metric {
@@ -24,6 +37,7 @@ interface Metric {
   value: string;
   change: string;
   changeType: "positive" | "negative" | "neutral";
+  icon: React.ReactNode;
 }
 
 export default function HomePage() {
@@ -33,24 +47,42 @@ export default function HomePage() {
       status: "healthy",
       uptime: "99.9%",
       responseTime: 45,
+      icon: (
+        <BoltIcon style={{ height: "20px", width: "20px", color: "#3b82f6" }} />
+      ),
     },
     {
       name: "Backend API (Node.js)",
       status: "healthy",
       uptime: "99.8%",
       responseTime: 120,
+      icon: (
+        <ServerIcon
+          style={{ height: "20px", width: "20px", color: "#10b981" }}
+        />
+      ),
     },
     {
       name: "Database (PostgreSQL)",
       status: "healthy",
       uptime: "99.9%",
       responseTime: 15,
+      icon: (
+        <CircleStackIcon
+          style={{ height: "20px", width: "20px", color: "#8b5cf6" }}
+        />
+      ),
     },
     {
       name: "Cache (Redis)",
       status: "warning",
       uptime: "98.5%",
       responseTime: 5,
+      icon: (
+        <CpuChipIcon
+          style={{ height: "20px", width: "20px", color: "#f97316" }}
+        />
+      ),
     },
   ]);
 
@@ -60,131 +92,738 @@ export default function HomePage() {
       value: "1.2M",
       change: "+12.5%",
       changeType: "positive",
+      icon: (
+        <ChartBarIcon
+          style={{ height: "16px", width: "16px", color: "#3b82f6" }}
+        />
+      ),
     },
     {
       name: "Average Response Time",
       value: "145ms",
       change: "-8.2%",
       changeType: "positive",
+      icon: (
+        <ClockIcon
+          style={{ height: "16px", width: "16px", color: "#10b981" }}
+        />
+      ),
     },
     {
       name: "Error Rate",
       value: "0.02%",
       change: "-15.3%",
       changeType: "positive",
+      icon: (
+        <ShieldCheckIcon
+          style={{ height: "16px", width: "16px", color: "#8b5cf6" }}
+        />
+      ),
     },
     {
       name: "Active Users",
       value: "2.4K",
       change: "+5.7%",
       changeType: "positive",
+      icon: (
+        <CloudIcon
+          style={{ height: "16px", width: "16px", color: "#f97316" }}
+        />
+      ),
     },
   ]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "healthy":
-        return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
+        return (
+          <CheckCircleIcon
+            style={{ height: "20px", width: "20px", color: "#10b981" }}
+          />
+        );
       case "warning":
-        return <ExclamationTriangleIcon className="h-5 w-5 text-yellow-500" />;
+        return (
+          <ExclamationTriangleIcon
+            style={{ height: "20px", width: "20px", color: "#f59e0b" }}
+          />
+        );
       case "error":
-        return <ExclamationTriangleIcon className="h-5 w-5 text-red-500" />;
+        return (
+          <ExclamationTriangleIcon
+            style={{ height: "20px", width: "20px", color: "#ef4444" }}
+          />
+        );
       default:
-        return <ClockIcon className="h-5 w-5 text-gray-500" />;
+        return (
+          <ClockIcon
+            style={{ height: "20px", width: "20px", color: "#6b7280" }}
+          />
+        );
     }
   };
 
-  const getStatusClass = (status: string) => {
+  const getStatusStyle = (status: string) => {
     switch (status) {
       case "healthy":
-        return "status-success";
+        return {
+          backgroundColor: "#dcfce7",
+          color: "#166534",
+          border: "1px solid #bbf7d0",
+        };
       case "warning":
-        return "status-warning";
+        return {
+          backgroundColor: "#fef3c7",
+          color: "#92400e",
+          border: "1px solid #fde68a",
+        };
       case "error":
-        return "status-error";
+        return {
+          backgroundColor: "#fee2e2",
+          color: "#991b1b",
+          border: "1px solid #fecaca",
+        };
       default:
-        return "bg-gray-100 text-gray-800";
+        return {
+          backgroundColor: "#f3f4f6",
+          color: "#374151",
+          border: "1px solid #d1d5db",
+        };
+    }
+  };
+
+  const getChangeIcon = (changeType: string) => {
+    switch (changeType) {
+      case "positive":
+        return (
+          <ArrowTrendingUpIcon
+            style={{ height: "16px", width: "16px", color: "#10b981" }}
+          />
+        );
+      case "negative":
+        return (
+          <ArrowTrendingDownIcon
+            style={{ height: "16px", width: "16px", color: "#ef4444" }}
+          />
+        );
+      default:
+        return (
+          <MinusIcon
+            style={{ height: "16px", width: "16px", color: "#6b7280" }}
+          />
+        );
     }
   };
 
   return (
-    <div className="space-y-8">
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       {/* Hero Section */}
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+      <div style={{ textAlign: "center", position: "relative" }}>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(to right, #3b82f6, #8b5cf6, #6366f1)",
+            opacity: 0.05,
+            borderRadius: "24px",
+            zIndex: -1,
+          }}
+        ></div>
+        <h1
+          style={{
+            fontSize: "48px",
+            fontWeight: "bold",
+            background: "linear-gradient(to right, #111827, #1e40af, #7c3aed)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            marginBottom: "24px",
+          }}
+        >
           DevOps Interview Project
         </h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <p
+          style={{
+            fontSize: "20px",
+            color: "#6b7280",
+            maxWidth: "768px",
+            margin: "0 auto",
+            lineHeight: "1.6",
+          }}
+        >
           A comprehensive demonstration of modern DevOps practices including
           Infrastructure as Code, containerization, CI/CD pipelines, and
-          monitoring.
+          monitoring. Perfect for learning and interview preparation.
         </p>
+        <div
+          style={{
+            marginTop: "32px",
+            display: "flex",
+            justifyContent: "center",
+            gap: "16px",
+          }}
+        >
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              padding: "8px 16px",
+              backgroundColor: "#dbeafe",
+              color: "#1d4ed8",
+              borderRadius: "9999px",
+              fontSize: "14px",
+              fontWeight: "500",
+            }}
+          >
+            <CloudIcon
+              style={{ height: "12px", width: "12px", marginRight: "8px" }}
+            />
+            AWS Cloud
+          </div>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              padding: "8px 16px",
+              backgroundColor: "#dcfce7",
+              color: "#166534",
+              borderRadius: "9999px",
+              fontSize: "14px",
+              fontWeight: "500",
+            }}
+          >
+            <CogIcon
+              style={{ height: "12px", width: "12px", marginRight: "8px" }}
+            />
+            Terraform
+          </div>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              padding: "8px 16px",
+              backgroundColor: "#f3e8ff",
+              color: "#7c3aed",
+              borderRadius: "9999px",
+              fontSize: "14px",
+              fontWeight: "500",
+            }}
+          >
+            <ServerIcon
+              style={{ height: "12px", width: "12px", marginRight: "8px" }}
+            />
+            Kubernetes
+          </div>
+        </div>
+      </div>
+
+      {/* Interview Preparation Section */}
+      <div
+        style={{
+          backgroundColor: "white",
+          borderRadius: "12px",
+          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+          border: "1px solid #e5e7eb",
+          padding: "24px",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "30px",
+            fontWeight: "bold",
+            color: "#111827",
+            marginBottom: "32px",
+            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "12px",
+          }}
+        >
+          <AcademicCapIcon
+            style={{ height: "32px", width: "32px", color: "#3b82f6" }}
+          />
+          DevOps Interview Preparation
+        </h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "24px",
+          }}
+        >
+          <div
+            style={{
+              padding: "20px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "8px",
+              backgroundColor: "#f8fafc",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "18px",
+                fontWeight: "bold",
+                color: "#111827",
+                marginBottom: "12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <BookOpenIcon
+                style={{ height: "20px", width: "20px", color: "#3b82f6" }}
+              />
+              Key Concepts to Master
+            </h3>
+            <ul
+              style={{ fontSize: "14px", color: "#6b7280", lineHeight: "1.6" }}
+            >
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Infrastructure as Code:</strong> Terraform,
+                CloudFormation
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Containerization:</strong> Docker, Kubernetes
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>CI/CD:</strong> GitHub Actions, Jenkins, GitLab CI
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Monitoring:</strong> Prometheus, Grafana, ELK Stack
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Security:</strong> IAM, Secrets Management, Network
+                Security
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Cloud Services:</strong> AWS, Azure, GCP
+              </li>
+            </ul>
+          </div>
+          <div
+            style={{
+              padding: "20px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "8px",
+              backgroundColor: "#f8fafc",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "18px",
+                fontWeight: "bold",
+                color: "#111827",
+                marginBottom: "12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <LightBulbIcon
+                style={{ height: "20px", width: "20px", color: "#10b981" }}
+              />
+              Common Interview Questions
+            </h3>
+            <ul
+              style={{ fontSize: "14px", color: "#6b7280", lineHeight: "1.6" }}
+            >
+              <li style={{ marginBottom: "8px" }}>
+                • "How would you design a highly available system?"
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • "Explain the difference between Docker and Kubernetes"
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • "How do you handle secrets in a CI/CD pipeline?"
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • "What's your approach to infrastructure scaling?"
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • "How do you monitor application performance?"
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • "Describe your disaster recovery strategy"
+              </li>
+            </ul>
+          </div>
+          <div
+            style={{
+              padding: "20px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "8px",
+              backgroundColor: "#f8fafc",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "18px",
+                fontWeight: "bold",
+                color: "#111827",
+                marginBottom: "12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <CodeBracketIcon
+                style={{ height: "20px", width: "20px", color: "#8b5cf6" }}
+              />
+              Technical Skills to Demonstrate
+            </h3>
+            <ul
+              style={{ fontSize: "14px", color: "#6b7280", lineHeight: "1.6" }}
+            >
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Scripting:</strong> Bash, Python, PowerShell
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Version Control:</strong> Git, GitFlow
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Networking:</strong> VPC, Load Balancers, DNS
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Databases:</strong> RDS, NoSQL, Caching
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Automation:</strong> Ansible, Chef, Puppet
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Logging:</strong> Centralized logging, log analysis
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       {/* Technology Stack */}
-      <div className="card">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+      <div
+        style={{
+          backgroundColor: "white",
+          borderRadius: "12px",
+          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+          border: "1px solid #e5e7eb",
+          padding: "24px",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "30px",
+            fontWeight: "bold",
+            color: "#111827",
+            marginBottom: "32px",
+            textAlign: "center",
+          }}
+        >
           Technology Stack
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg">
-            <CloudIcon className="h-8 w-8 text-blue-600" />
-            <div>
-              <h3 className="font-medium text-gray-900">AWS Cloud</h3>
-              <p className="text-sm text-gray-600">EKS, RDS, ElastiCache</p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "24px",
+          }}
+        >
+          <div
+            style={{
+              position: "relative",
+              overflow: "hidden",
+              borderRadius: "12px",
+              background: "linear-gradient(135deg, #dbeafe, #bfdbfe)",
+              padding: "24px",
+              transition: "all 0.3s ease",
+              cursor: "pointer",
+            }}
+          >
+            <CloudIcon
+              style={{
+                height: "32px",
+                width: "32px",
+                color: "#2563eb",
+                marginBottom: "16px",
+              }}
+            />
+            <h3
+              style={{
+                fontWeight: "bold",
+                color: "#111827",
+                fontSize: "18px",
+                marginBottom: "8px",
+              }}
+            >
+              AWS Cloud
+            </h3>
+            <p
+              style={{
+                fontSize: "14px",
+                color: "#6b7280",
+                marginBottom: "12px",
+              }}
+            >
+              EKS, RDS, ElastiCache
+            </p>
+            <div style={{ fontSize: "12px", color: "#374151" }}>
+              <strong>Interview Tip:</strong> Know the difference between EC2,
+              ECS, and EKS. Understand VPC networking and security groups.
             </div>
           </div>
-          <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-lg">
-            <CogIcon className="h-8 w-8 text-green-600" />
-            <div>
-              <h3 className="font-medium text-gray-900">Terraform</h3>
-              <p className="text-sm text-gray-600">Infrastructure as Code</p>
+          <div
+            style={{
+              position: "relative",
+              overflow: "hidden",
+              borderRadius: "12px",
+              background: "linear-gradient(135deg, #dcfce7, #bbf7d0)",
+              padding: "24px",
+              transition: "all 0.3s ease",
+              cursor: "pointer",
+            }}
+          >
+            <CogIcon
+              style={{
+                height: "32px",
+                width: "32px",
+                color: "#16a34a",
+                marginBottom: "16px",
+              }}
+            />
+            <h3
+              style={{
+                fontWeight: "bold",
+                color: "#111827",
+                fontSize: "18px",
+                marginBottom: "8px",
+              }}
+            >
+              Terraform
+            </h3>
+            <p
+              style={{
+                fontSize: "14px",
+                color: "#6b7280",
+                marginBottom: "12px",
+              }}
+            >
+              Infrastructure as Code
+            </p>
+            <div style={{ fontSize: "12px", color: "#374151" }}>
+              <strong>Interview Tip:</strong> Understand state management,
+              modules, and the difference between Terraform and CloudFormation.
             </div>
           </div>
-          <div className="flex items-center space-x-3 p-4 bg-purple-50 rounded-lg">
-            <ServerIcon className="h-8 w-8 text-purple-600" />
-            <div>
-              <h3 className="font-medium text-gray-900">Kubernetes</h3>
-              <p className="text-sm text-gray-600">Container Orchestration</p>
+          <div
+            style={{
+              position: "relative",
+              overflow: "hidden",
+              borderRadius: "12px",
+              background: "linear-gradient(135deg, #f3e8ff, #e9d5ff)",
+              padding: "24px",
+              transition: "all 0.3s ease",
+              cursor: "pointer",
+            }}
+          >
+            <ServerIcon
+              style={{
+                height: "32px",
+                width: "32px",
+                color: "#9333ea",
+                marginBottom: "16px",
+              }}
+            />
+            <h3
+              style={{
+                fontWeight: "bold",
+                color: "#111827",
+                fontSize: "18px",
+                marginBottom: "8px",
+              }}
+            >
+              Kubernetes
+            </h3>
+            <p
+              style={{
+                fontSize: "14px",
+                color: "#6b7280",
+                marginBottom: "12px",
+              }}
+            >
+              Container Orchestration
+            </p>
+            <div style={{ fontSize: "12px", color: "#374151" }}>
+              <strong>Interview Tip:</strong> Know pods, services, deployments,
+              and ingress. Understand the difference between Docker and K8s.
             </div>
           </div>
-          <div className="flex items-center space-x-3 p-4 bg-orange-50 rounded-lg">
-            <ShieldCheckIcon className="h-8 w-8 text-orange-600" />
-            <div>
-              <h3 className="font-medium text-gray-900">Security</h3>
-              <p className="text-sm text-gray-600">IAM, Secrets Manager</p>
+          <div
+            style={{
+              position: "relative",
+              overflow: "hidden",
+              borderRadius: "12px",
+              background: "linear-gradient(135deg, #fed7aa, #fdba74)",
+              padding: "24px",
+              transition: "all 0.3s ease",
+              cursor: "pointer",
+            }}
+          >
+            <ShieldCheckIcon
+              style={{
+                height: "32px",
+                width: "32px",
+                color: "#ea580c",
+                marginBottom: "16px",
+              }}
+            />
+            <h3
+              style={{
+                fontWeight: "bold",
+                color: "#111827",
+                fontSize: "18px",
+                marginBottom: "8px",
+              }}
+            >
+              Security
+            </h3>
+            <p
+              style={{
+                fontSize: "14px",
+                color: "#6b7280",
+                marginBottom: "12px",
+              }}
+            >
+              IAM, Secrets Manager
+            </p>
+            <div style={{ fontSize: "12px", color: "#374151" }}>
+              <strong>Interview Tip:</strong> Understand the principle of least
+              privilege, secrets management, and network security best
+              practices.
             </div>
           </div>
         </div>
       </div>
 
       {/* System Status */}
-      <div className="card">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+      <div
+        style={{
+          backgroundColor: "white",
+          borderRadius: "12px",
+          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+          border: "1px solid #e5e7eb",
+          padding: "24px",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "30px",
+            fontWeight: "bold",
+            color: "#111827",
+            marginBottom: "32px",
+            textAlign: "center",
+          }}
+        >
           System Status
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "24px",
+          }}
+        >
           {systemStatus.map((system, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-medium text-gray-900">{system.name}</h3>
+            <div
+              key={index}
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                borderRadius: "12px",
+                border: "1px solid #e5e7eb",
+                padding: "24px",
+                background: "linear-gradient(135deg, white, #f9fafb)",
+                transition: "all 0.3s ease",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: "16px",
+                }}
+              >
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "12px" }}
+                >
+                  {system.icon}
+                  <h3
+                    style={{
+                      fontWeight: "bold",
+                      color: "#111827",
+                      fontSize: "18px",
+                    }}
+                  >
+                    {system.name}
+                  </h3>
+                </div>
                 {getStatusIcon(system.status)}
               </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Status:</span>
-                  <span className={getStatusClass(system.status)}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span style={{ color: "#6b7280", fontWeight: "500" }}>
+                    Status:
+                  </span>
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      padding: "4px 12px",
+                      borderRadius: "9999px",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      ...getStatusStyle(system.status),
+                    }}
+                  >
                     {system.status.charAt(0).toUpperCase() +
                       system.status.slice(1)}
                   </span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Uptime:</span>
-                  <span className="font-medium">{system.uptime}</span>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span style={{ color: "#6b7280", fontWeight: "500" }}>
+                    Uptime:
+                  </span>
+                  <span style={{ fontWeight: "bold", color: "#111827" }}>
+                    {system.uptime}
+                  </span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Response Time:</span>
-                  <span className="font-medium">{system.responseTime}ms</span>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span style={{ color: "#6b7280", fontWeight: "500" }}>
+                    Response Time:
+                  </span>
+                  <span style={{ fontWeight: "bold", color: "#111827" }}>
+                    {system.responseTime}ms
+                  </span>
                 </div>
               </div>
             </div>
@@ -193,25 +832,90 @@ export default function HomePage() {
       </div>
 
       {/* Metrics Dashboard */}
-      <div className="card">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+      <div
+        style={{
+          backgroundColor: "white",
+          borderRadius: "12px",
+          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+          border: "1px solid #e5e7eb",
+          padding: "24px",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "30px",
+            fontWeight: "bold",
+            color: "#111827",
+            marginBottom: "32px",
+            textAlign: "center",
+          }}
+        >
           Performance Metrics
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "24px",
+          }}
+        >
           {metrics.map((metric, index) => (
-            <div key={index} className="text-center">
-              <div className="text-2xl font-bold text-gray-900 mb-1">
+            <div
+              key={index}
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                borderRadius: "12px",
+                background: "linear-gradient(135deg, white, #f9fafb)",
+                padding: "24px",
+                border: "1px solid #e5e7eb",
+                transition: "all 0.3s ease",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: "16px",
+                }}
+              >
+                {metric.icon}
+                {getChangeIcon(metric.changeType)}
+              </div>
+              <div
+                style={{
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                  color: "#111827",
+                  marginBottom: "8px",
+                }}
+              >
                 {metric.value}
               </div>
-              <div className="text-sm text-gray-600 mb-2">{metric.name}</div>
               <div
-                className={`text-xs font-medium ${
-                  metric.changeType === "positive"
-                    ? "text-green-600"
-                    : metric.changeType === "negative"
-                    ? "text-red-600"
-                    : "text-gray-600"
-                }`}
+                style={{
+                  fontSize: "14px",
+                  color: "#6b7280",
+                  marginBottom: "12px",
+                  fontWeight: "500",
+                }}
+              >
+                {metric.name}
+              </div>
+              <div
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  display: "flex",
+                  alignItems: "center",
+                  color:
+                    metric.changeType === "positive"
+                      ? "#10b981"
+                      : metric.changeType === "negative"
+                      ? "#ef4444"
+                      : "#6b7280",
+                }}
               >
                 {metric.change} from last week
               </div>
@@ -220,34 +924,465 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Features */}
-      <div className="card">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-          Key Features
+      {/* Learning Resources */}
+      <div
+        style={{
+          backgroundColor: "white",
+          borderRadius: "12px",
+          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+          border: "1px solid #e5e7eb",
+          padding: "24px",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "30px",
+            fontWeight: "bold",
+            color: "#111827",
+            marginBottom: "32px",
+            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "12px",
+          }}
+        >
+          <GlobeAltIcon
+            style={{ height: "32px", width: "32px", color: "#3b82f6" }}
+          />
+          Learning Resources
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-900">
-              Infrastructure as Code
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "24px",
+          }}
+        >
+          <div
+            style={{
+              padding: "20px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "8px",
+              backgroundColor: "#f8fafc",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "18px",
+                fontWeight: "bold",
+                color: "#111827",
+                marginBottom: "12px",
+              }}
+            >
+              📚 Documentation & Courses
             </h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li>• Terraform modules for AWS resources</li>
-              <li>• VPC with public and private subnets</li>
-              <li>• EKS cluster with auto-scaling</li>
-              <li>• RDS PostgreSQL with encryption</li>
-              <li>• Redis ElastiCache for caching</li>
+            <ul
+              style={{ fontSize: "14px", color: "#6b7280", lineHeight: "1.6" }}
+            >
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>AWS:</strong> AWS Well-Architected Framework
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Terraform:</strong> HashiCorp Learn Platform
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Kubernetes:</strong> Official K8s Documentation
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Docker:</strong> Docker Official Tutorials
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>CI/CD:</strong> GitHub Actions Documentation
+              </li>
             </ul>
           </div>
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-900">
-              DevOps Practices
+          <div
+            style={{
+              padding: "20px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "8px",
+              backgroundColor: "#f8fafc",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "18px",
+                fontWeight: "bold",
+                color: "#111827",
+                marginBottom: "12px",
+              }}
+            >
+              🎯 Practice Projects
             </h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li>• Containerized applications with Docker</li>
-              <li>• Kubernetes deployment manifests</li>
-              <li>• CI/CD pipelines with GitHub Actions</li>
-              <li>• Monitoring with Prometheus & Grafana</li>
-              <li>• Security best practices implementation</li>
+            <ul
+              style={{ fontSize: "14px", color: "#6b7280", lineHeight: "1.6" }}
+            >
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Infrastructure:</strong> Deploy a web app with
+                Terraform
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Containers:</strong> Containerize a multi-service app
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Kubernetes:</strong> Deploy to local cluster
+                (kind/minikube)
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Monitoring:</strong> Set up Prometheus + Grafana
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>CI/CD:</strong> Build automated deployment pipeline
+              </li>
+            </ul>
+          </div>
+          <div
+            style={{
+              padding: "20px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "8px",
+              backgroundColor: "#f8fafc",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "18px",
+                fontWeight: "bold",
+                color: "#111827",
+                marginBottom: "12px",
+              }}
+            >
+              💡 Interview Preparation
+            </h3>
+            <ul
+              style={{ fontSize: "14px", color: "#6b7280", lineHeight: "1.6" }}
+            >
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>System Design:</strong> Practice designing scalable
+                systems
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Troubleshooting:</strong> Debug common infrastructure
+                issues
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Security:</strong> Understand security best practices
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Cost Optimization:</strong> Learn AWS cost management
+              </li>
+              <li style={{ marginBottom: "8px" }}>
+                • <strong>Networking:</strong> Master VPC and networking
+                concepts
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Features */}
+      <div
+        style={{
+          backgroundColor: "white",
+          borderRadius: "12px",
+          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+          border: "1px solid #e5e7eb",
+          padding: "24px",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "30px",
+            fontWeight: "bold",
+            color: "#111827",
+            marginBottom: "32px",
+            textAlign: "center",
+          }}
+        >
+          Key Features
+        </h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
+            gap: "32px",
+          }}
+        >
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "24px" }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                marginBottom: "16px",
+              }}
+            >
+              <div
+                style={{
+                  padding: "8px",
+                  backgroundColor: "#dbeafe",
+                  borderRadius: "8px",
+                }}
+              >
+                <CogIcon
+                  style={{ height: "24px", width: "24px", color: "#2563eb" }}
+                />
+              </div>
+              <h3
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  color: "#111827",
+                }}
+              >
+                Infrastructure as Code
+              </h3>
+            </div>
+            <ul
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                fontSize: "14px",
+                color: "#6b7280",
+              }}
+            >
+              <li
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#3b82f6",
+                    borderRadius: "50%",
+                    marginTop: "8px",
+                    flexShrink: 0,
+                  }}
+                ></div>
+                <span>Terraform modules for AWS resources</span>
+              </li>
+              <li
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#3b82f6",
+                    borderRadius: "50%",
+                    marginTop: "8px",
+                    flexShrink: 0,
+                  }}
+                ></div>
+                <span>VPC with public and private subnets</span>
+              </li>
+              <li
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#3b82f6",
+                    borderRadius: "50%",
+                    marginTop: "8px",
+                    flexShrink: 0,
+                  }}
+                ></div>
+                <span>EKS cluster with auto-scaling</span>
+              </li>
+              <li
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#3b82f6",
+                    borderRadius: "50%",
+                    marginTop: "8px",
+                    flexShrink: 0,
+                  }}
+                ></div>
+                <span>RDS PostgreSQL with encryption</span>
+              </li>
+              <li
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#3b82f6",
+                    borderRadius: "50%",
+                    marginTop: "8px",
+                    flexShrink: 0,
+                  }}
+                ></div>
+                <span>Redis ElastiCache for caching</span>
+              </li>
+            </ul>
+          </div>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "24px" }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                marginBottom: "16px",
+              }}
+            >
+              <div
+                style={{
+                  padding: "8px",
+                  backgroundColor: "#dcfce7",
+                  borderRadius: "8px",
+                }}
+              >
+                <ServerIcon
+                  style={{ height: "24px", width: "24px", color: "#16a34a" }}
+                />
+              </div>
+              <h3
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  color: "#111827",
+                }}
+              >
+                DevOps Practices
+              </h3>
+            </div>
+            <ul
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                fontSize: "14px",
+                color: "#6b7280",
+              }}
+            >
+              <li
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#10b981",
+                    borderRadius: "50%",
+                    marginTop: "8px",
+                    flexShrink: 0,
+                  }}
+                ></div>
+                <span>Containerized applications with Docker</span>
+              </li>
+              <li
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#10b981",
+                    borderRadius: "50%",
+                    marginTop: "8px",
+                    flexShrink: 0,
+                  }}
+                ></div>
+                <span>Kubernetes deployment manifests</span>
+              </li>
+              <li
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#10b981",
+                    borderRadius: "50%",
+                    marginTop: "8px",
+                    flexShrink: 0,
+                  }}
+                ></div>
+                <span>CI/CD pipelines with GitHub Actions</span>
+              </li>
+              <li
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#10b981",
+                    borderRadius: "50%",
+                    marginTop: "8px",
+                    flexShrink: 0,
+                  }}
+                ></div>
+                <span>Monitoring with Prometheus & Grafana</span>
+              </li>
+              <li
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#10b981",
+                    borderRadius: "50%",
+                    marginTop: "8px",
+                    flexShrink: 0,
+                  }}
+                ></div>
+                <span>Security best practices implementation</span>
+              </li>
             </ul>
           </div>
         </div>

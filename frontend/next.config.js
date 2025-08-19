@@ -5,18 +5,13 @@ const nextConfig = {
 
   // Environment variables
   env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
+    CUSTOM_KEY: process.env.CUSTOM_KEY || "default-value",
   },
 
   // Image optimization
   images: {
     domains: ["localhost"],
     formats: ["image/webp", "image/avif"],
-  },
-
-  // Experimental features
-  experimental: {
-    appDir: true,
   },
 
   // Output configuration

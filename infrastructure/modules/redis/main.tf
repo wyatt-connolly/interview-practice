@@ -36,13 +36,13 @@ resource "aws_elasticache_parameter_group" "main" {
 
 # Replication group for Redis
 resource "aws_elasticache_replication_group" "main" {
-  replication_group_id          = "${var.project_name}-${var.environment}-redis"
-  replication_group_description = "Redis cluster for ${var.project_name} ${var.environment}"
-  node_type                     = var.node_type
-  port                          = 6379
-  parameter_group_name          = aws_elasticache_parameter_group.main.name
-  subnet_group_name             = aws_elasticache_subnet_group.main.name
-  security_group_ids            = [var.redis_security_group_id]
+  replication_group_id = "${var.project_name}-${var.environment}-redis"
+  description          = "Redis cluster for ${var.project_name} ${var.environment}"
+  node_type            = var.node_type
+  port                 = 6379
+  parameter_group_name = aws_elasticache_parameter_group.main.name
+  subnet_group_name    = aws_elasticache_subnet_group.main.name
+  security_group_ids   = [var.redis_security_group_id]
 
   # Multi-AZ configuration
   automatic_failover_enabled = var.automatic_failover_enabled
